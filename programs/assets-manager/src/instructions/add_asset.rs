@@ -1,6 +1,6 @@
 use crate::states::*;
 use anchor_lang::prelude::*;
-use anchor_spl::token::Mint;
+use anchor_spl::token::{Mint, Token};
 
 #[derive(Accounts)]
 pub struct AddAssets<'info> {
@@ -22,14 +22,18 @@ pub struct AddAssets<'info> {
         bump,
     )]
     pub asset_info: Account<'info, AssetInfo>,
-    pub underlying_token: Account<'info, Mint>,
     #[account(
         init,
         payer = signer,
-        space = 8 + Mint::LEN,
+        mint::decimals = 6,
+        mint::authority = asset,
+        seeds = [b"asset", underlying_token.key().as_ref()],
+        bump,
     )]
     pub asset: Account<'info, Mint>,
+    pub underlying_token: Account<'info, Mint>,
     pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, Token>,
 }
 
 pub fn handler(ctx: Context<AddAssets>, max_supply: u128) -> Result<()> {
