@@ -2,7 +2,8 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct GlobalState {
-    pub admin: Pubkey,
+    /// Admin address of the program, manage the assets
+    pub admin: Pubkey, // 32 bytes
 }
 
 impl GlobalState {

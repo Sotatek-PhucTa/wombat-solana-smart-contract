@@ -11,7 +11,11 @@ pub mod assets_manager {
     use super::*;
 
     pub fn initialize(ctx: Context<InitializeState>) -> Result<()> {
-        instructions::init_state::handler(ctx)
+        init_state::handler(ctx)
+    }
+
+    pub fn add_asset(ctx: Context<AddAssets>, max_supply: u128) -> Result<()> {
+        add_asset::handler(ctx, max_supply)
     }
 }
 
