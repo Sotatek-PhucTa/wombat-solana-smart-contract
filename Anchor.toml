@@ -2,6 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
+assets-manager = "6pJXuxSNVEV7uX76QWzbhrdZYUhf7XPRDZ7FXVfRKELu"
 wombat_solana = "C35VTXEEBrWAcQ3tCHh7x45ZRWLpu9KSQpTxfPHR8CYo"
 
 [registry]
