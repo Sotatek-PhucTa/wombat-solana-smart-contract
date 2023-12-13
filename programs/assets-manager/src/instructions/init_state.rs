@@ -19,5 +19,13 @@ pub struct InitializeState<'info> {
 pub fn handler(ctx: Context<InitializeState>) -> Result<()> {
     let global_state = &mut ctx.accounts.global_state;
     global_state.initialize(ctx.accounts.signer.key());
+    emit!(Initialized {
+        admin: ctx.accounts.signer.key()
+    });
     Ok(())
+}
+
+#[event]
+pub struct Initialized {
+    pub admin: Pubkey,
 }
