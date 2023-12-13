@@ -3,7 +3,7 @@ import * as token from "@solana/spl-token";
 import { AssetsManager } from "../target/types/assets_manager";
 import { BN, Program } from "@coral-xyz/anchor";
 import { assert } from "chai";
-import { getDefaultWallet } from "./helpers";
+import { airdrop, delay, getDefaultWallet } from "./helpers";
 
 describe("assets-manager", () => {
   const provider = anchor.AnchorProvider.env();
@@ -45,7 +45,6 @@ describe("assets-manager", () => {
         globalState,
       })
       .rpc();
-    console.log("Your transaction signature", tx);
 
     const globalStateAccount = await program.account.globalState.fetch(
       globalState
@@ -54,6 +53,26 @@ describe("assets-manager", () => {
       globalStateAccount.admin.toBase58() ===
         anchor.getProvider().publicKey.toBase58()
     );
+  });
+
+  it("Add new asset failed unauthorized", async () => {
+    try {
+      const signer = anchor.web3.Keypair.generate();
+      await airdrop(provider.connection, signer.publicKey);
+      const tx = await program.methods
+        .addAsset(new BN(1000000))
+        .accounts({
+          globalState,
+          underlyingToken: tokenMint,
+          assetInfo,
+          asset,
+          signer: signer.publicKey,
+        })
+        .signers([signer])
+        .rpc();
+    } catch (error) {
+      assert(error.error.errorCode.code === "ConstraintAddress");
+    }
   });
 
   it("Add new asset", async () => {
@@ -66,7 +85,6 @@ describe("assets-manager", () => {
         asset,
       })
       .rpc();
-    console.log("Your transaction signature", tx);
 
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(
