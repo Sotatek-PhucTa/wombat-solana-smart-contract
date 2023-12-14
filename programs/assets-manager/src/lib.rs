@@ -28,6 +28,10 @@ pub mod assets_manager {
     ) -> Result<()> {
         transfer_underlying_token::handler(ctx, amount)
     }
+
+    pub fn mint(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
+        mint_asset::handler(ctx, amount)
+    }
 }
 
 #[derive(Accounts)]
