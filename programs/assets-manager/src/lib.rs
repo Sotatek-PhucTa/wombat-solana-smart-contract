@@ -41,6 +41,14 @@ pub mod assets_manager {
     pub fn remove_cash(ctx: Context<UpdateCash>, amount: u64) -> Result<()> {
         remove_cash::handler(ctx, amount)
     }
+
+    pub fn add_liability(ctx: Context<UpdateLiability>, amount: u64) -> Result<()> {
+        add_liability::handler(ctx, amount)
+    }
+
+    pub fn remove_liability(ctx: Context<UpdateLiability>, amount: u64) -> Result<()> {
+        remove_liability::handler(ctx, amount)
+    }
 }
 
 #[derive(Accounts)]

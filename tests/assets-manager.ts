@@ -253,4 +253,30 @@ describe("assets-manager", () => {
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.cash.eq(new BN(50000)));
   });
+
+  it("Add liability successfully", async () => {
+    await program.methods
+      .addLiability(new BN(100000))
+      .accounts({
+        globalState,
+        underlyingToken: tokenMint,
+        assetInfo,
+      })
+      .rpc();
+    const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
+    assert(assetInfoAccount.liability.eq(new BN(100000)));
+  });
+
+  it("Remove liability successfully", async () => {
+    await program.methods
+      .removeLiability(new BN(50000))
+      .accounts({
+        globalState,
+        underlyingToken: tokenMint,
+        assetInfo,
+      })
+      .rpc();
+    const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
+    assert(assetInfoAccount.liability.eq(new BN(50000)));
+  });
 });
