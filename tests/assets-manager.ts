@@ -4,6 +4,7 @@ import { AssetsManager } from "../target/types/assets_manager";
 import { BN, Program } from "@coral-xyz/anchor";
 import { assert } from "chai";
 import { airdrop, delay, getDefaultWallet } from "./helpers";
+import * as punycode from "punycode";
 
 describe("assets-manager", () => {
   const provider = anchor.AnchorProvider.env();
@@ -124,5 +125,54 @@ describe("assets-manager", () => {
 
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.maxSupply.eq(new BN(2000000)));
+  });
+
+  it("Transfer underlying token", async () => {
+    let assetInfoAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      tokenMint,
+      assetInfo,
+      true
+    );
+    let userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      tokenMint,
+      defaultWallet.publicKey
+    );
+    const tx = await token.mintTo(
+      provider.connection,
+      defaultWallet,
+      tokenMint,
+      assetInfoAta.address,
+      defaultWallet,
+      100000000
+    );
+    assetInfoAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      tokenMint,
+      assetInfo,
+      true
+    );
+
+    await program.methods
+      .transferUnderlyingToken(new BN(100000))
+      .accounts({
+        globalState,
+        underlyingToken: tokenMint,
+        assetInfo,
+        from: assetInfoAta.address,
+        to: userAta.address,
+      })
+      .rpc();
+    userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      tokenMint,
+      defaultWallet.publicKey
+    );
+    assert(userAta.amount.toString() === "100000");
   });
 });

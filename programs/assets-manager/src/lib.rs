@@ -21,6 +21,13 @@ pub mod assets_manager {
     pub fn set_max_supply(ctx: Context<SetMaxSupply>, max_supply: u128) -> Result<()> {
         set_max_supply::handler(ctx, max_supply)
     }
+
+    pub fn transfer_underlying_token(
+        ctx: Context<TransferUnderlyingToken>,
+        amount: u128,
+    ) -> Result<()> {
+        transfer_underlying_token::handler(ctx, amount)
+    }
 }
 
 #[derive(Accounts)]
