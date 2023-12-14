@@ -93,6 +93,25 @@ describe("assets-manager", () => {
     assert(assetInfoAccount.asset.toBase58() === asset.toBase58());
   });
 
+  it("Set max supply unauthorized", async () => {
+    try {
+      const signer = anchor.web3.Keypair.generate();
+      await airdrop(provider.connection, signer.publicKey);
+      await program.methods
+        .setMaxSupply(new BN(2000000))
+        .accounts({
+          underlyingToken: tokenMint,
+          assetInfo,
+          globalState,
+          signer: signer.publicKey,
+        })
+        .signers([signer])
+        .rpc();
+    } catch (error) {
+      assert(error.error.errorCode.code === "ConstraintAddress");
+    }
+  });
+
   it("Set max supply", async () => {
     await program.methods
       .setMaxSupply(new BN(2000000))
