@@ -204,6 +204,51 @@ describe("assets-manager", () => {
     assert(userAta.amount.toString() === "100000");
   });
 
+  it("Burn asset", async () => {
+    let userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      asset,
+      defaultWallet.publicKey
+    );
+
+    // Approve first, before burning
+    await token.approve(
+      provider.connection,
+      defaultWallet,
+      userAta.address,
+      assetInfo,
+      defaultWallet,
+      50000
+    );
+
+    try {
+      await program.methods
+        .burn(new BN(50000))
+        .accounts({
+          globalState,
+          asset,
+          from: userAta.address,
+          underlyingToken: tokenMint,
+          assetInfo,
+        })
+        .rpc();
+    } catch (error) {
+      console.error(error);
+    }
+
+    userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      asset,
+      defaultWallet.publicKey
+    );
+    assert(userAta.amount.toString() === "50000");
+
+    const assetMint = await token.getMint(provider.connection, asset);
+    assert(assetMint.supply.toString() === "50000");
+  });
+
   it("Mint asset failure out of supply", async () => {
     let userAta = await token.getOrCreateAssociatedTokenAccount(
       provider.connection,

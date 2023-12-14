@@ -1,6 +1,6 @@
 use crate::states::*;
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Burn, Mint, MintTo, Token, TokenAccount};
+use anchor_spl::token::{self, Burn, Mint, Token, TokenAccount};
 
 #[derive(Accounts)]
 pub struct BurnAsset<'info> {
