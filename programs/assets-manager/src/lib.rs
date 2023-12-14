@@ -17,6 +17,10 @@ pub mod assets_manager {
     pub fn add_asset(ctx: Context<AddAssets>, max_supply: u128) -> Result<()> {
         add_asset::handler(ctx, max_supply)
     }
+
+    pub fn set_max_supply(ctx: Context<SetMaxSupply>, max_supply: u128) -> Result<()> {
+        set_max_supply::handler(ctx, max_supply)
+    }
 }
 
 #[derive(Accounts)]

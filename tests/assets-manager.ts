@@ -92,4 +92,18 @@ describe("assets-manager", () => {
     );
     assert(assetInfoAccount.asset.toBase58() === asset.toBase58());
   });
+
+  it("Set max supply", async () => {
+    await program.methods
+      .setMaxSupply(new BN(2000000))
+      .accounts({
+        underlyingToken: tokenMint,
+        assetInfo,
+        globalState,
+      })
+      .rpc();
+
+    const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
+    assert(assetInfoAccount.maxSupply.eq(new BN(2000000)));
+  });
 });

@@ -29,4 +29,8 @@ impl AssetInfo {
         self.liability = 0;
         self.max_supply = max_supply;
     }
+
+    pub fn set_max_supply(&mut self, max_supply: u128) {
+        self.max_supply = max_supply;
+    }
 }
