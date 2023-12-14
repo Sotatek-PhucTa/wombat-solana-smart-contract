@@ -1,3 +1,4 @@
+use crate::error::AssetManagerError;
 use crate::states::*;
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount};
@@ -36,6 +37,11 @@ pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
     let to = &mut ctx.accounts.to;
     let token_program = &ctx.accounts.token_program;
     let asset = &ctx.accounts.asset;
+    let asset_info = &ctx.accounts.asset_info;
+
+    if asset.supply + (amount as u64) > asset_info.max_supply as u64 {
+        return Err(AssetManagerError::OutOfSupply.into());
+    }
 
     token::mint_to(
         CpiContext::new_with_signer(
@@ -43,7 +49,7 @@ pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
             MintTo {
                 mint: asset.to_account_info(),
                 to: to.to_account_info(),
-                authority: ctx.accounts.asset_info.to_account_info(),
+                authority: asset_info.to_account_info(),
             },
             &[&[
                 "asset_info".as_bytes(),

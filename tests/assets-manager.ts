@@ -203,4 +203,28 @@ describe("assets-manager", () => {
     );
     assert(userAta.amount.toString() === "100000");
   });
+
+  it("Mint asset failure out of supply", async () => {
+    let userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      asset,
+      defaultWallet.publicKey
+    );
+
+    try {
+      await program.methods
+        .mint(new BN(2000000))
+        .accounts({
+          globalState,
+          asset,
+          to: userAta.address,
+          underlyingToken: tokenMint,
+          assetInfo,
+        })
+        .rpc();
+    } catch (error) {
+      assert(error.error.errorCode.code === "OutOfSupply");
+    }
+  });
 });
