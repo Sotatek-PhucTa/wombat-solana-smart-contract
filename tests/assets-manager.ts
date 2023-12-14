@@ -175,4 +175,31 @@ describe("assets-manager", () => {
     );
     assert(userAta.amount.toString() === "100000");
   });
+
+  it("Mint asset", async () => {
+    let userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      asset,
+      defaultWallet.publicKey
+    );
+
+    await program.methods
+      .mint(new BN(100000))
+      .accounts({
+        globalState,
+        asset,
+        to: userAta.address,
+        underlyingToken: tokenMint,
+      })
+      .rpc();
+
+    userAta = await token.getOrCreateAssociatedTokenAccount(
+      provider.connection,
+      defaultWallet,
+      asset,
+      defaultWallet.publicKey
+    );
+    assert(userAta.amount.toString() === "100000");
+  });
 });
