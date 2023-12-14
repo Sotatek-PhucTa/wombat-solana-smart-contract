@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token};
 
 #[derive(Accounts)]
-pub struct AddCash<'info> {
+pub struct UpdateCash<'info> {
     #[account(
         seeds = [b"global_state"],
         bump,
@@ -26,7 +26,7 @@ pub struct AddCash<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<AddCash>, amount: u64) -> Result<()> {
+pub fn handler(ctx: Context<UpdateCash>, amount: u64) -> Result<()> {
     let asset_info = &mut ctx.accounts.asset_info;
     asset_info.cash += amount;
     Ok(())

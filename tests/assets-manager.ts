@@ -240,4 +240,17 @@ describe("assets-manager", () => {
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.cash.eq(new BN(100000)));
   });
+
+  it("Remove cash successfully", async () => {
+    await program.methods
+      .removeCash(new BN(50000))
+      .accounts({
+        globalState,
+        underlyingToken: tokenMint,
+        assetInfo,
+      })
+      .rpc();
+    const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
+    assert(assetInfoAccount.cash.eq(new BN(50000)));
+  });
 });

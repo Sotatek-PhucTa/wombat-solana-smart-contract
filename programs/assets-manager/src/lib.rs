@@ -34,8 +34,12 @@ pub mod assets_manager {
         mint_asset::handler(ctx, amount)
     }
 
-    pub fn add_cash(ctx: Context<AddCash>, amount: u64) -> Result<()> {
+    pub fn add_cash(ctx: Context<UpdateCash>, amount: u64) -> Result<()> {
         add_cash::handler(ctx, amount)
+    }
+
+    pub fn remove_cash(ctx: Context<UpdateCash>, amount: u64) -> Result<()> {
+        remove_cash::handler(ctx, amount)
     }
 }
 
