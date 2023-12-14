@@ -33,13 +33,13 @@ pub struct MintAsset<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
+pub fn handler(ctx: Context<MintAsset>, amount: u64) -> Result<()> {
     let to = &mut ctx.accounts.to;
     let token_program = &ctx.accounts.token_program;
     let asset = &ctx.accounts.asset;
     let asset_info = &ctx.accounts.asset_info;
 
-    if asset.supply + (amount as u64) > asset_info.max_supply as u64 {
+    if asset.supply + amount > asset_info.max_supply {
         return Err(AssetManagerError::MaxSupplyReached.into());
     }
 
@@ -57,7 +57,7 @@ pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
                 &[ctx.bumps.asset_info],
             ]],
         ),
-        amount as u64,
+        amount,
     )?;
     Ok(())
 }

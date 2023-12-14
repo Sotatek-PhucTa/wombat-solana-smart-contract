@@ -31,7 +31,7 @@ pub struct TransferUnderlyingToken<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<TransferUnderlyingToken>, amount: u128) -> Result<()> {
+pub fn handler(ctx: Context<TransferUnderlyingToken>, amount: u64) -> Result<()> {
     let from = &mut ctx.accounts.from;
     let to = &mut ctx.accounts.to;
     let token_program = &ctx.accounts.token_program;
@@ -51,7 +51,7 @@ pub fn handler(ctx: Context<TransferUnderlyingToken>, amount: u128) -> Result<()
                 &[ctx.bumps.asset_info],
             ]],
         ),
-        amount as u64,
+        amount,
     )?;
     Ok(())
 }

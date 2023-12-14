@@ -24,7 +24,7 @@ pub struct SetMaxSupply<'info> {
     pub underlying_token: Account<'info, Mint>,
 }
 
-pub fn handler(ctx: Context<SetMaxSupply>, max_supply: u128) -> Result<()> {
+pub fn handler(ctx: Context<SetMaxSupply>, max_supply: u64) -> Result<()> {
     let asset_info = &mut ctx.accounts.asset_info;
     asset_info.set_max_supply(max_supply);
     Ok(())

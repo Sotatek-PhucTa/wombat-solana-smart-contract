@@ -15,22 +15,22 @@ pub mod assets_manager {
         init_state::handler(ctx)
     }
 
-    pub fn add_asset(ctx: Context<AddAssets>, max_supply: u128) -> Result<()> {
+    pub fn add_asset(ctx: Context<AddAssets>, max_supply: u64) -> Result<()> {
         add_asset::handler(ctx, max_supply)
     }
 
-    pub fn set_max_supply(ctx: Context<SetMaxSupply>, max_supply: u128) -> Result<()> {
+    pub fn set_max_supply(ctx: Context<SetMaxSupply>, max_supply: u64) -> Result<()> {
         set_max_supply::handler(ctx, max_supply)
     }
 
     pub fn transfer_underlying_token(
         ctx: Context<TransferUnderlyingToken>,
-        amount: u128,
+        amount: u64,
     ) -> Result<()> {
         transfer_underlying_token::handler(ctx, amount)
     }
 
-    pub fn mint(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
+    pub fn mint(ctx: Context<MintAsset>, amount: u64) -> Result<()> {
         mint_asset::handler(ctx, amount)
     }
 }

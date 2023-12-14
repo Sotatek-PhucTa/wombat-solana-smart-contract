@@ -36,7 +36,7 @@ pub struct AddAssets<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<AddAssets>, max_supply: u128) -> Result<()> {
+pub fn handler(ctx: Context<AddAssets>, max_supply: u64) -> Result<()> {
     let asset_info = &mut ctx.accounts.asset_info;
     asset_info.initialize(
         ctx.accounts.underlying_token.key(),
