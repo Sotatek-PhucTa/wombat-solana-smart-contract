@@ -224,7 +224,7 @@ describe("assets-manager", () => {
         })
         .rpc();
     } catch (error) {
-      assert(error.error.errorCode.code === "OutOfSupply");
+      assert(error.error.errorCode.code === "MaxSupplyReached");
     }
   });
 });

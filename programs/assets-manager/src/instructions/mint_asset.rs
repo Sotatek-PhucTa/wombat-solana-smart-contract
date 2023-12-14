@@ -40,7 +40,7 @@ pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
     let asset_info = &ctx.accounts.asset_info;
 
     if asset.supply + (amount as u64) > asset_info.max_supply as u64 {
-        return Err(AssetManagerError::OutOfSupply.into());
+        return Err(AssetManagerError::MaxSupplyReached.into());
     }
 
     token::mint_to(
