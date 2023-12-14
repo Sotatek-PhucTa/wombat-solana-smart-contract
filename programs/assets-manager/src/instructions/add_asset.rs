@@ -26,7 +26,7 @@ pub struct AddAssets<'info> {
         init,
         payer = signer,
         mint::decimals = 6,
-        mint::authority = asset,
+        mint::authority = asset_info,
         seeds = [b"asset", underlying_token.key().as_ref()],
         bump,
     )]

@@ -20,6 +20,11 @@ pub struct MintAsset<'info> {
         bump,
     )]
     pub asset: Account<'info, Mint>,
+    #[account(
+        seeds = [b"asset_info", underlying_token.key().as_ref()],
+        bump,
+    )]
+    pub asset_info: Account<'info, AssetInfo>,
     #[account(mut)]
     pub to: Account<'info, TokenAccount>,
     pub underlying_token: Account<'info, Mint>,
@@ -38,12 +43,12 @@ pub fn handler(ctx: Context<MintAsset>, amount: u128) -> Result<()> {
             MintTo {
                 mint: asset.to_account_info(),
                 to: to.to_account_info(),
-                authority: asset.to_account_info(),
+                authority: ctx.accounts.asset_info.to_account_info(),
             },
             &[&[
-                "asset".as_bytes(),
+                "asset_info".as_bytes(),
                 ctx.accounts.underlying_token.key().as_ref(),
-                &[ctx.bumps.asset],
+                &[ctx.bumps.asset_info],
             ]],
         ),
         amount as u64,

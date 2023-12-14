@@ -191,6 +191,7 @@ describe("assets-manager", () => {
         asset,
         to: userAta.address,
         underlyingToken: tokenMint,
+        assetInfo,
       })
       .rpc();
 
