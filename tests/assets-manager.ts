@@ -227,4 +227,17 @@ describe("assets-manager", () => {
       assert(error.error.errorCode.code === "MaxSupplyReached");
     }
   });
+
+  it("Add cash successfully", async () => {
+    await program.methods
+      .addCash(new BN(100000))
+      .accounts({
+        globalState,
+        underlyingToken: tokenMint,
+        assetInfo,
+      })
+      .rpc();
+    const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
+    assert(assetInfoAccount.cash.eq(new BN(100000)));
+  });
 });

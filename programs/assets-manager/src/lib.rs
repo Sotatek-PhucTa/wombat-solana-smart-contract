@@ -33,6 +33,10 @@ pub mod assets_manager {
     pub fn mint(ctx: Context<MintAsset>, amount: u64) -> Result<()> {
         mint_asset::handler(ctx, amount)
     }
+
+    pub fn add_cash(ctx: Context<AddCash>, amount: u64) -> Result<()> {
+        add_cash::handler(ctx, amount)
+    }
 }
 
 #[derive(Accounts)]
