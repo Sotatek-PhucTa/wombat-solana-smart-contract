@@ -285,7 +285,9 @@ describe("assets-manager", () => {
         globalState,
         underlyingToken: tokenMint,
         assetInfo,
+        signer: pool.publicKey,
       })
+      .signers([pool])
       .rpc();
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.cash.eq(new BN(100000)));
@@ -298,7 +300,9 @@ describe("assets-manager", () => {
         globalState,
         underlyingToken: tokenMint,
         assetInfo,
+        signer: pool.publicKey,
       })
+      .signers([pool])
       .rpc();
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.cash.eq(new BN(50000)));

@@ -37,4 +37,12 @@ impl AssetInfo {
     pub fn set_max_supply(&mut self, max_supply: u64) {
         self.max_supply = max_supply;
     }
+
+    pub fn add_cash(&mut self, amount: u64) {
+        self.cash += amount;
+    }
+
+    pub fn remove_cash(&mut self, amount: u64) {
+        self.cash -= amount;
+    }
 }
