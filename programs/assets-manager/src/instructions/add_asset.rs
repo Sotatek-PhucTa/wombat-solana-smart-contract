@@ -14,6 +14,8 @@ pub struct AddAssets<'info> {
         address = global_state.admin.key(),
     )]
     pub signer: Signer<'info>,
+    #[account()]
+    pub pool: Signer<'info>,
     #[account(
         init,
         payer = signer,
@@ -41,6 +43,7 @@ pub fn handler(ctx: Context<AddAssets>, max_supply: u64) -> Result<()> {
     asset_info.initialize(
         ctx.accounts.underlying_token.key(),
         ctx.accounts.asset.key(),
+        ctx.accounts.pool.key(),
         max_supply,
     );
     Ok(())

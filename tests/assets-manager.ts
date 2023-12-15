@@ -16,6 +16,7 @@ describe("assets-manager", () => {
   );
 
   const defaultWallet = getDefaultWallet();
+  const pool = anchor.web3.Keypair.generate();
   let tokenMint: anchor.web3.PublicKey;
   let assetInfo: anchor.web3.PublicKey;
   let asset: anchor.web3.PublicKey;
@@ -68,8 +69,9 @@ describe("assets-manager", () => {
           assetInfo,
           asset,
           signer: signer.publicKey,
+          pool: pool.publicKey,
         })
-        .signers([signer])
+        .signers([signer, pool])
         .rpc();
     } catch (error) {
       assert(error.error.errorCode.code === "ConstraintAddress");
@@ -84,13 +86,16 @@ describe("assets-manager", () => {
         underlyingToken: tokenMint,
         assetInfo,
         asset,
+        pool: pool.publicKey,
       })
+      .signers([pool])
       .rpc();
 
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(
       assetInfoAccount.underlyingToken.toBase58() === tokenMint.toBase58()
     );
+    assert(assetInfoAccount.pool.toBase58() === pool.publicKey.toBase58());
     assert(assetInfoAccount.asset.toBase58() === asset.toBase58());
   });
 

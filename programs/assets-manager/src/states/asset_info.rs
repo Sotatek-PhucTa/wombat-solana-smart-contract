@@ -6,6 +6,8 @@ pub struct AssetInfo {
     pub underlying_token: Pubkey, //32 bytes
     /// The asset address, a mint pda
     pub asset: Pubkey, // 32 bytes
+    /// The pool address of asset, used to invoke function on asset
+    pub pool: Pubkey, // 32 bytes
     /// The cash value for the assets
     pub cash: u64, // 8 bytes
     /// The liability value for the assets
@@ -15,11 +17,18 @@ pub struct AssetInfo {
 }
 
 impl AssetInfo {
-    pub const SPACE: usize = 32 * 2 + 8 * 3;
+    pub const SPACE: usize = 32 * 3 + 8 * 3;
 
-    pub fn initialize(&mut self, underlying_token: Pubkey, asset_address: Pubkey, max_supply: u64) {
+    pub fn initialize(
+        &mut self,
+        underlying_token: Pubkey,
+        asset_address: Pubkey,
+        pool: Pubkey,
+        max_supply: u64,
+    ) {
         self.underlying_token = underlying_token;
         self.asset = asset_address;
+        self.pool = pool;
         self.cash = 0;
         self.liability = 0;
         self.max_supply = max_supply;
