@@ -45,4 +45,12 @@ impl AssetInfo {
     pub fn remove_cash(&mut self, amount: u64) {
         self.cash -= amount;
     }
+
+    pub fn add_liability(&mut self, amount: u64) {
+        self.liability += amount;
+    }
+
+    pub fn remove_liability(&mut self, amount: u64) {
+        self.liability -= amount;
+    }
 }

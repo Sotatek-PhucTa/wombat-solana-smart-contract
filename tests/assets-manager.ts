@@ -312,10 +312,11 @@ describe("assets-manager", () => {
     await program.methods
       .addLiability(new BN(100000))
       .accounts({
-        globalState,
         underlyingToken: tokenMint,
         assetInfo,
+        signer: pool.publicKey,
       })
+      .signers([pool])
       .rpc();
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.liability.eq(new BN(100000)));
@@ -325,10 +326,11 @@ describe("assets-manager", () => {
     await program.methods
       .removeLiability(new BN(50000))
       .accounts({
-        globalState,
         underlyingToken: tokenMint,
         assetInfo,
+        signer: pool.publicKey,
       })
+      .signers([pool])
       .rpc();
     const assetInfoAccount = await program.account.assetInfo.fetch(assetInfo);
     assert(assetInfoAccount.liability.eq(new BN(50000)));

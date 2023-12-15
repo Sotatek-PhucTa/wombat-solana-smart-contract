@@ -5,13 +5,8 @@ use anchor_spl::token::{Mint, Token};
 #[derive(Accounts)]
 pub struct UpdateLiability<'info> {
     #[account(
-        seeds = [b"global_state"],
-        bump,
-    )]
-    pub global_state: Account<'info, GlobalState>,
-    #[account(
         mut,
-        address = global_state.admin.key(),
+        address = asset_info.pool.key(),
     )]
     pub signer: Signer<'info>,
     #[account(
@@ -28,6 +23,6 @@ pub struct UpdateLiability<'info> {
 
 pub fn handler(ctx: Context<UpdateLiability>, amount: u64) -> Result<()> {
     let asset_info = &mut ctx.accounts.asset_info;
-    asset_info.liability += amount;
+    asset_info.add_liability(amount);
     Ok(())
 }
